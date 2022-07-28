@@ -1,9 +1,9 @@
-
 # import
+#from dataprep.eda import create_report
 from Funcoes.LimpaDataFrame import *
 from Funcoes.LibPartidas import *
 from Funcoes.RetrieveDataFromRepository import *
-
+import matplotlib.pyplot as plt
 # main
 
 # Recupera Data do repositório github usado como referencia
@@ -34,3 +34,5 @@ RodadaAtual = GetRodadaAtual(cartola2022)
 print(RodadaAtual)
 # Inserir no dataframe se a pontuação do jogador na rodada X foi ou nao como jogador da casa
 GetPartidasByRodada(cartola2022, RodadaAtual)
+
+#%%
