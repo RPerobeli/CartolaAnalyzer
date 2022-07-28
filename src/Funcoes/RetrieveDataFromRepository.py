@@ -3,6 +3,7 @@ import re                          # Expressão regulares
 import requests                    # Acessar páginas da internet
 from bs4 import BeautifulSoup      # Raspar elementos de páginas da internet
 import pandas as pd                # Abrir e concatenar bancos de dados
+from Funcoes import LibPartidas
 
 
 def RetrieveDataFromRepository(year):
@@ -45,5 +46,21 @@ def RetrieveDataFromRepository(year):
     cartolaDF = pd.concat(list_of_dataframes)
     cartolaDF = cartolaDF[cartolaDF['atletas.posicao_id'] != 'tec']
     return cartolaDF
+# endFunction
 
+
+def RetrievePartidasFromApi(rodadaAtual):
+    ListaPartidasPorRodada = []
+    DictPartidas = {}
+    for i in range(1, rodadaAtual+1):
+        partidas = LibPartidas.GetPartidasByRodada(i)
+        DictPartidas[i] = partidas
+    # endfor
+    for key, item in DictPartidas.items():
+        df = pd.DataFrame(item)
+        df['rodada'] = key
+        ListaPartidasPorRodada.append(df)
+    # endfor
+    dfPartidasAteoMomento = pd.concat(ListaPartidasPorRodada)
+    return dfPartidasAteoMomento
 # endFunction
