@@ -1,3 +1,4 @@
+
 # import
 from Funcoes.LimpaDataFrame import *
 from Funcoes.LibPartidas import *
@@ -27,9 +28,13 @@ listaColunas = ['atletas.atleta_id',
 
 cartola2022 = RetiraColunasIndesejadas(
     data=cartola2022, ColunasDesejadas=listaColunas)
-# print(cartola2022)
 RodadaAtual = GetRodadaAtual(cartola2022)
 print(RodadaAtual)
 # Inserir no dataframe se a pontuação do jogador na rodada X foi ou nao como jogador da casa
 dfPartidasAteRodadaAtual = RetrievePartidasFromApi(rodadaAtual=RodadaAtual)
-print(dfPartidasAteRodadaAtual['rodada'])
+
+dfPartidasAteRodadaAtual = RetiraColunasIndesejadas(
+    dfPartidasAteRodadaAtual, ['rodada', 'clube_casa_id', 'clube_visitante_id'])
+
+[JogadoresCasa, JogadoresFora] = SeparaDataframeHomeAway(
+    cartola2022, dfPartidasAteRodadaAtual)
