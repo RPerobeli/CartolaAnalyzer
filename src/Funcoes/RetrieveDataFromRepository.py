@@ -8,7 +8,7 @@ from Funcoes import LibPartidas
 
 def RetrieveDataFromRepository(year):
     # URL com caminho do repositório
-    URL = f'https://github.com/henriquepgomide/caRtola/tree/master/data/{year}'
+    URL = f'https://github.com/henriquepgomide/caRtola/tree/master/data/01_raw/{year}'
     html = requests.get(URL)
     # Criar objeto BeautifulSoup para raspar urls
     soup = BeautifulSoup(html.text, 'lxml')
@@ -24,12 +24,12 @@ def RetrieveDataFromRepository(year):
     # Encontrar tags de nosso interesse
     for tag in soup.find_all('a', attrs={'href': re.compile(regex)}):
         href_str = tag.get('href')
-        file_name = re.sub(f'/henriquepgomide/caRtola/blob/master/data/{year}/',   # Substituir padrão por nada
+        file_name = re.sub(f'/henriquepgomide/caRtola/blob/master/data/01_raw/{year}/',   # Substituir padrão por nada
                            '',
                            href_str)
 
-        file_url = re.sub(f'/henriquepgomide/caRtola/blob/master/data/{year}/',    # Substituir padrão por links para arquivos raw
-                          f'https://raw.githubusercontent.com/henriquepgomide/caRtola/master/data/{year}/',
+        file_url = re.sub(f'/henriquepgomide/caRtola/blob/master/data/01_raw/{year}/',    # Substituir padrão por links para arquivos raw
+                          f'https://raw.githubusercontent.com/henriquepgomide/caRtola/master/data/01_raw/{year}/',
                           href_str)
 
         dict_of_files[file_name] = file_url
