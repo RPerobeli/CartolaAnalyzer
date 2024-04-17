@@ -40,6 +40,7 @@ def Fase1():
     [JogadoresCasa, JogadoresFora] = SeparaDataframeHomeAway(
         cartola2022, dfPartidasAteRodadaAtual)
     AnaliseJogadoresCasa = AnalisarParametrosJogadores(JogadoresCasa)
-    AnaliseJogadoresFora = AnalisarParametrosJogadores(JogadoresFora)
-    print(AnaliseJogadoresCasa)
+    #AnaliseJogadoresFora = AnalisarParametrosJogadores(JogadoresFora)
+    #print(AnaliseJogadoresCasa)
+    #print(AnaliseJogadoresFora)
 # endFunction

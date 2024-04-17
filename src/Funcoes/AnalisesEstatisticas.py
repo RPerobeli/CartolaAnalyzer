@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 def AnalisarParametrosJogadores(dfJogadores):
@@ -17,8 +19,11 @@ def AnalisarParametrosJogadores(dfJogadores):
         clubeJogador = clubeJogadorList[0]
 
         dfJogador = dfJogador.query(f'`atletas.pontos_num` != 0')
+        print(dfJogador['atletas.pontos_num'].describe())
+        ax = sns.boxplot(y=dfJogador['atletas.pontos_num'])
+        plt.show()
 
-        mediaJogador = dfJogador['atletas.pontos_num'].mean()
+        """mediaJogador = dfJogador['atletas.pontos_num'].mean()
         desvioPadraoJogador = dfJogador['atletas.pontos_num'].std()
         if(dfJogador['atletas.pontos_num'].size < 5):
             mediaMovelJogador = dfJogador['atletas.pontos_num'].mean()
@@ -28,10 +33,11 @@ def AnalisarParametrosJogadores(dfJogadores):
         ParametrosJogador = {'Id': id, 'Nome' : nomeJogador, 'Media': mediaJogador, 'MediaMovel': mediaMovelJogador, 'DesvioPadrao': desvioPadraoJogador, "Clube": clubeJogador}
         df = pd.DataFrame(ParametrosJogador, index=[indice])
         indice += 1
-        ListaDicionariosParametrosJogadores.append(df)  
+        ListaDicionariosParametrosJogadores.append(df)   """
+        break
     # endfor
-    dfParametrosTodosJogadores = pd.concat(ListaDicionariosParametrosJogadores)
-    return dfParametrosTodosJogadores
+    #dfParametrosTodosJogadores = pd.concat(ListaDicionariosParametrosJogadores)
+    #return dfParametrosTodosJogadores
 # endFunction
 
 """ (['atletas.atleta_id', 'atletas.rodada_id', 'atletas.clube_id',

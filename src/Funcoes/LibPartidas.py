@@ -7,7 +7,7 @@ def GetPartidasByRodada(numRodada):
     URL = f"https://api.cartolafc.globo.com/partidas/{numRodada}"
     response = requests.get(URL)
     PartidasCompleteData = json.loads(response.text)
-    return PartidasCompleteData['partidas']
+    return PartidasCompleteData
 # endFunction
 
 
