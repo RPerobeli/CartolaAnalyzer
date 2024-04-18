@@ -42,6 +42,5 @@ def RetrieveJogadoresFromApi():
         'apelido'
     ]
     df_jogadores = FiltraColunasDesejadas(df_jogadores, colunasDesejadas)
-    df_jogadores['entrou_em_campo'] = df_jogadores['entrou_em_campo'].astype(str)
     return df_jogadores
 #endFunction
