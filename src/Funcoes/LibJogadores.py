@@ -9,3 +9,10 @@ def GetJogadores():
     proximas = json.loads(response.text)
     return proximas['atletas']
 # endFunction
+
+def GetClubes():
+    URL = f"https://api.cartola.globo.com/atletas/mercado"
+    response = requests.get(URL)
+    proximas = json.loads(response.text)
+    return proximas['clubes']
+# endFunction
