@@ -21,5 +21,3 @@ def GetProximasPartidas(numRodada):
         print('erro na aquisição de proximas partidas.')
     # endif
 # endFunction
-
-

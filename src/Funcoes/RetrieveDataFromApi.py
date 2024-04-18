@@ -1,6 +1,7 @@
 import pandas as pd                # Abrir e concatenar bancos de dados
 import Funcoes.LibPartidas as LibPartidas
 import Funcoes.LibJogadores as  LibJogadores
+import Funcoes.LibClubes as LibClubes
 
 def FiltraColunasDesejadas(data, ColunasDesejadas):
     data = data[ColunasDesejadas]
@@ -21,6 +22,11 @@ def RetrievePartidasFromApi(rodadaAtual):
     return dfPartidasAteoMomento
 # endFunction
 
+def RetrieveClubesFromApi():
+    clubes = LibClubes.GetClubes()
+    df_clubes = pd.DataFrame.from_dict(clubes)
+    return df_clubes
+#endFunction
 
 def RetrieveJogadoresFromApi():
     jogadores = LibJogadores.GetJogadores()
