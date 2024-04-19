@@ -8,16 +8,18 @@ import Funcoes.LimpaDados as LimpaDados
 '''Ideia é valorizar o time ou atingir maior pontuacao?
     Usará tecnica de goleiro reserva?
     Qual o esquema tático?
+    Qual a quantidade de cartoletas disponiveis?
 '''
 PontuacaoOverValorizacao = True
 isTecnicaGoleiroReserva = True
 esquema = [2,2,3,3] #num zagueiros / laterais /meias / atacantes
+cartoletas = 120
 
 #Recuperar Clubes
 df_clubes = RetrieveDataFromApi.RetrieveClubesFromApi()
 
 #recuperar dados próx partidas
-rodadaAtual = 2
+rodadaAtual = 3
 df_partidas = RetrieveDataFromApi.RetrievePartidasFromApi(rodadaAtual=rodadaAtual)
 df_partidas = RetrieveDataFromApi.FiltraColunasDesejadas(
         df_partidas, ['rodada', 'clube_casa_id', 'clube_visitante_id'])
@@ -42,15 +44,14 @@ if(rodadaAtual == 2):
         df_jogadores['probabilidade_valorizar'] = (maiorPontuacao - df_jogadores['minimo_para_valorizar'])/(maiorPontuacao-menorPontuacao)
     else:
         df_jogadores['probabilidade_valorizar'] = 0
-elif(rodadaAtual >=4):
+elif(rodadaAtual >=3):
     df_jogadores['minimo_para_valorizar'] = df_jogadores['pontos_num']
     if(maiorPontuacao-menorPontuacao!=0):
         df_jogadores['probabilidade_valorizar'] = (maiorPontuacao - df_jogadores['media_num'])/(maiorPontuacao-menorPontuacao)
     else:
         df_jogadores['probabilidade_valorizar'] = 0
 
-)
-df_jogadores['custo_beneficio'] = df_jogadores['preco_num']/df_jogadores['media_num']
+df_jogadores['custo_beneficio'] = df_jogadores['preco_num']/df_jogadores['media_num'].abs()
 
 
 #Separar jogadores com status provavel e não provavel
@@ -63,6 +64,7 @@ df_jogadores_casa, df_jogadores_fora = LimpaDados.SeparaDataframeHomeAway(df_jog
 colunasDesejadasExposicao = [
         'minimo_para_valorizar',
         'clube',
+        'entrou_em_campo',
         'pontos_num',
         'media_num',
         'variacao_num',
@@ -72,7 +74,7 @@ colunasDesejadasExposicao = [
         'probabilidade_valorizar'
     ]
 #Normalizacao dos dados de interesse
-df_jogadores_casa = LimpaDados.NormalizeEficienciaDataFrame(df_jogadores_casa)
+#df_jogadores_casa = LimpaDados.NormalizeEficienciaDataFrame(df_jogadores_casa)
 
 #Atacantes
 atacantes = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 5]
