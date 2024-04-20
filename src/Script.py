@@ -30,9 +30,14 @@ print("PARTIDAS DA RODADA:")
 print(df_partidasExposicao)
 
 
+#recuperar dados jogadores rodadas anteriores
+df_jogadores_rodadas_anteriores = RetrieveDataFromApi.RetrieveJogadoresRodadasAntigasFromApi(rodadaAtual)
+print(df_jogadores_rodadas_anteriores)
+
 
 #recuperar dados jogadores
 df_jogadores = RetrieveDataFromApi.RetrieveJogadoresFromApi()
+
 df_jogadores = LimpaDados.ReplaceIdForNameJogadores(df_jogadores, df_clubes)
 maiorPontuacao = df_jogadores['pontos_num'].max()
 menorPontuacao = df_jogadores['pontos_num'].min()
@@ -53,7 +58,11 @@ elif(rodadaAtual >=3):
         df_jogadores['probabilidade_valorizar'] = 0
 
 df_jogadores['custo_beneficio'] = df_jogadores['preco_num']/df_jogadores['media_num'].abs()
+df_jogadores['media_movel'] = 0.0
 
+for i in range(df_jogadores.shape[0]):
+    for j in range(df_jogadores_rodadas_anteriores.shape[0]):
+    
 
 #Separar jogadores com status provavel e não provavel
 df_jogadores_nulos = df_jogadores[df_jogadores['status_id'] != 7]

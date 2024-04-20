@@ -10,3 +10,11 @@ def GetJogadores():
     return proximas['atletas']
 # endFunction
 
+def GetJogadoresByRodada(rodada):
+    URL = f"https://api.cartola.globo.com/atletas/pontuados/{rodada}"
+    response = requests.get(URL)
+    atletas = json.loads(response.text)
+    atletas = atletas['atletas']
+    return atletas
+# endFunction
+

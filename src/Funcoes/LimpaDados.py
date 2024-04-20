@@ -62,3 +62,37 @@ def CalculaEficiencia(dfJogadores, PontuacaoOverValorizacao):
     else:
         dfJogadores['eficiencia'] = (1-dfJogadores['minimo_para_valorizar'])+(1-dfJogadores['custo_beneficio'])
 #endFunction
+        
+def CalculaMediaMovel(df):
+    df['media_movel'] = 0.0
+    jogadores = df['index'].unique()
+    for i in range(0,jogadores.shape[0]):
+        df_mediaMovel = df[df['index']==jogadores[i]]
+        mediaMovel = df_mediaMovel['pontuacao'].mean()
+        for j in range(0,df.shape[0]):
+            if(df.at[j,'index'] == jogadores[i]):
+                df.at[j,'media_movel'] = mediaMovel
+            #endif
+        #endfor
+    #endfor
+    return df
+#endFunction
+
+def CalculaTendencia(df):
+    df['tendencia'] = 0.0
+    jogadores = df['index'].unique()
+    for i in range(0,jogadores.shape[0]):
+        df_tendencia = df[df['index']==jogadores[i]]
+        menorRodada = df_tendencia['rodada'].min()
+        maiorRodada = df_tendencia['rodada'].max()
+        pontAntiga = df_tendencia[df_tendencia['rodada']==menorRodada]['pontuacao']
+        pontRecente = df_tendencia[df_tendencia['rodada']==menorRodada]['pontuacao']
+        tendencia = pontRecente - pontAntiga
+        for j in range(0,df.shape[0]):
+            if(df.at[j,'index'] == jogadores[i]):
+                df.at[j,'tendencia'] = tendencia
+            #endif
+        #endfor
+    #endfor
+    return df
+#endFunction

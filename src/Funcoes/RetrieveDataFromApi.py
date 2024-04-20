@@ -2,6 +2,7 @@ import pandas as pd                # Abrir e concatenar bancos de dados
 import Funcoes.LibPartidas as LibPartidas
 import Funcoes.LibJogadores as  LibJogadores
 import Funcoes.LibClubes as LibClubes
+import Funcoes.LimpaDados as LimpaDados
 
 def FiltraColunasDesejadas(data, ColunasDesejadas):
     data = data[ColunasDesejadas]
@@ -21,6 +22,32 @@ def RetrievePartidasFromApi(rodadaAtual):
     dfPartidasAteoMomento = pd.concat(ListaPartidasPorRodada)
     return dfPartidasAteoMomento
 # endFunction
+
+def RetrieveJogadoresRodadasAntigasFromApi(rodadaAtual):
+    ListaJogadoresPorRodada = []
+    for i in range(rodadaAtual-5, rodadaAtual):
+        if(i<=0):
+            continue
+        atletasrodada = LibJogadores.GetJogadoresByRodada(i)
+        df_jogadores = pd.DataFrame.from_dict(atletasrodada)
+        df_jogadores = df_jogadores.transpose().reset_index()
+        df_jogadores['rodada'] = i
+        colunasDesejadas = [
+        'rodada',
+        'index',
+        'apelido',
+        'pontuacao', 
+        'entrou_em_campo'
+        ]
+        df_jogadores = FiltraColunasDesejadas(df_jogadores, colunasDesejadas)
+        ListaJogadoresPorRodada.append(df_jogadores)
+    # endfor
+    df = pd.concat(ListaJogadoresPorRodada).reset_index(drop=True)
+    df = LimpaDados.CalculaMediaMovel(df)
+    print(df)
+    return df
+# endFunction
+
 
 def RetrieveClubesFromApi():
     clubes = LibClubes.GetClubes()
