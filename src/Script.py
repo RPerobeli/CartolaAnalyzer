@@ -37,6 +37,7 @@ df_jogadores = LimpaDados.ReplaceIdForNameJogadores(df_jogadores, df_clubes)
 maiorPontuacao = df_jogadores['pontos_num'].max()
 menorPontuacao = df_jogadores['pontos_num'].min()
 
+
 #adiciona informacoes de pontuacao
 if(rodadaAtual == 2):
     df_jogadores['minimo_para_valorizar'] = df_jogadores['preco_num']*0.45
@@ -78,7 +79,10 @@ colunasDesejadasExposicao = [
 
 #Atacantes
 atacantes = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 5]
+
 if(PontuacaoOverValorizacao):
+    mediaUltimaRodadaAta = df_jogadores['pontos_num'].mean()
+    atacantes = atacantes[atacantes['pontos_num']>= mediaUltimaRodadaAta]
     atacantes = atacantes.sort_values('custo_beneficio', ascending=True)
 else:
     atacantes = atacantes.sort_values('probabilidade_valorizar', ascending=True)
@@ -86,9 +90,13 @@ else:
 atacantes = RetrieveDataFromApi.FiltraColunasDesejadas(atacantes, colunasDesejadasExposicao)
 print("ATACANTES:")
 print(atacantes)
+
 #Meias
 meias = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 4]
+
 if(PontuacaoOverValorizacao):
+    mediaUltimaRodadaMei = df_jogadores['pontos_num'].mean()
+    meias = meias[meias['pontos_num']>= mediaUltimaRodadaMei]
     meias = meias.sort_values('custo_beneficio', ascending=True)
 else:
     meias = meias.sort_values('probabilidade_valorizar', ascending=True)
@@ -99,6 +107,8 @@ print(meias)
 #Zagueiros
 zagueiros = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 3]
 if(PontuacaoOverValorizacao):
+    mediaUltimaRodadaZag = df_jogadores['pontos_num'].mean()
+    zagueiros = zagueiros[zagueiros['pontos_num']>= mediaUltimaRodadaZag]
     zagueiros = zagueiros.sort_values('custo_beneficio', ascending=True)
 else:
     zagueiros = zagueiros.sort_values('probabilidade_valorizar', ascending=True)
@@ -109,6 +119,8 @@ print(zagueiros)
 #Laterais
 laterais = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 2]
 if(PontuacaoOverValorizacao):
+    mediaUltimaRodadaLat = df_jogadores['pontos_num'].mean()
+    laterais = laterais[laterais['pontos_num']>= mediaUltimaRodadaLat]
     laterais = laterais.sort_values('custo_beneficio', ascending=True)
 else:
     laterais = laterais.sort_values('probabilidade_valorizar', ascending=True)
@@ -119,6 +131,8 @@ print(laterais)
 #Goleiros
 goleiros = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 1]
 if(PontuacaoOverValorizacao):
+    mediaUltimaRodadaGol = df_jogadores['pontos_num'].mean()
+    goleiros = goleiros[goleiros['pontos_num']>= mediaUltimaRodadaGol]
     goleiros = goleiros.sort_values('custo_beneficio', ascending=True)
 else:
     goleiros = goleiros.sort_values('probabilidade_valorizar', ascending=True)
