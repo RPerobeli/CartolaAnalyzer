@@ -78,6 +78,21 @@ def CalculaMediaMovel(df):
     return df
 #endFunction
 
+def CalculaDesvioPadrao(df):
+    df['desv_padrao'] = 0.0
+    jogadores = df['index'].unique()
+    for i in range(0,jogadores.shape[0]):
+        df_std = df[df['index']==jogadores[i]]
+        desvioPadrao = df_std['pontuacao'].std()
+        for j in range(0,df.shape[0]):
+            if(df.at[j,'index'] == jogadores[i]):
+                df.at[j,'desv_padrao'] = desvioPadrao
+            #endif
+        #endfor
+    #endfor
+    return df
+#endFunction
+
 def CalculaTendencia(df):
     df['tendencia'] = 0.0
     jogadores = df['index'].unique()
@@ -96,3 +111,36 @@ def CalculaTendencia(df):
     #endfor
     return df
 #endFunction
+
+def CompletaInformacoesEstatisticas(rodadaAtual, df_jogadores_rodadas_anteriores, df_jogadores):
+    maiorPontuacao = df_jogadores['pontos_num'].max()
+    menorPontuacao = df_jogadores['pontos_num'].min()
+    if(rodadaAtual == 2):
+        df_jogadores['minimo_para_valorizar'] = df_jogadores['preco_num']*0.45
+        if(maiorPontuacao-menorPontuacao!=0):
+            df_jogadores['probabilidade_valorizar'] = (maiorPontuacao - df_jogadores['minimo_para_valorizar'])/(maiorPontuacao-menorPontuacao)
+        else:
+            df_jogadores['probabilidade_valorizar'] = 0
+    elif(rodadaAtual >=3):
+        df_jogadores['minimo_para_valorizar'] = df_jogadores['pontos_num']
+        if(maiorPontuacao-menorPontuacao!=0):
+            df_jogadores['probabilidade_valorizar'] = (maiorPontuacao - df_jogadores['media_num'])/(maiorPontuacao-menorPontuacao)
+        else:
+            df_jogadores['probabilidade_valorizar'] = 0
+
+    df_jogadores['custo_beneficio'] = df_jogadores['preco_num']/df_jogadores['media_num'].abs()
+    df_jogadores['media_movel'] = 0.0
+    df_jogadores['desv_padrao'] = 0.0
+
+    jogadores = df_jogadores_rodadas_anteriores['apelido']
+
+    for jogador in jogadores:
+        mediaMovel = df_jogadores_rodadas_anteriores[df_jogadores_rodadas_anteriores['apelido'] == jogador]['media_movel'].values[0]
+        desvioPadrao = df_jogadores_rodadas_anteriores[df_jogadores_rodadas_anteriores['apelido'] == jogador]['desv_padrao'].values[0]
+        if(df_jogadores.loc[df_jogadores['apelido'] == jogador].empty):
+            continue
+        else:
+            df_jogadores.loc[df_jogadores['apelido'] == jogador,'media_movel'] = float(mediaMovel)
+            df_jogadores.loc[df_jogadores['apelido'] == jogador,'desv_padrao'] = float(desvioPadrao)
+
+    return df_jogadores

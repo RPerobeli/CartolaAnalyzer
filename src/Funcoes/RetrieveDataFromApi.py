@@ -44,9 +44,13 @@ def RetrieveJogadoresRodadasAntigasFromApi(rodadaAtual):
     # endfor
     df = pd.concat(ListaJogadoresPorRodada).reset_index(drop=True)
     df = LimpaDados.CalculaMediaMovel(df)
+    df = LimpaDados.CalculaDesvioPadrao(df)
     print(df)
+    df = df.groupby(['index','media_movel','desv_padrao']).max().reset_index()
     return df
 # endFunction
+
+
 
 
 def RetrieveClubesFromApi():
