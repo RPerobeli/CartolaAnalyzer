@@ -128,7 +128,6 @@ def CompletaInformacoesEstatisticas(rodadaAtual, df_jogadores_rodadas_anteriores
         else:
             df_jogadores['probabilidade_valorizar'] = 0
 
-    df_jogadores['custo_beneficio'] = df_jogadores['preco_num']/df_jogadores['media_num'].abs()
     df_jogadores['media_movel'] = 0.0
     df_jogadores['desv_padrao'] = 0.0
 
@@ -143,4 +142,21 @@ def CompletaInformacoesEstatisticas(rodadaAtual, df_jogadores_rodadas_anteriores
             df_jogadores.loc[df_jogadores['apelido'] == jogador,'media_movel'] = float(mediaMovel)
             df_jogadores.loc[df_jogadores['apelido'] == jogador,'desv_padrao'] = float(desvioPadrao)
 
+    df_jogadores['custo_beneficio'] = df_jogadores['preco_num']/df_jogadores['media_movel'].abs()
+    df_jogadores['constancia'] = df_jogadores['media_movel']/df_jogadores['desv_padrao'].abs()
+
     return df_jogadores
+#endFunction
+
+def RecuperaMediasTimes(df_jogadores,df_partidas):
+    df_partidas['delta_media_clube'] = 0.0
+    df = df_jogadores.groupby('clube', as_index=False)['media_movel'].mean().sort_values('media_movel', ascending=False)
+    print(df)
+    for i in range(0,df_partidas.shape[0]):
+        mandante = df_partidas.loc[i,'clube_casa']
+        visitante = df_partidas.loc[i,'clube_visitante']
+        media_mandante = df[df['clube'] == mandante]['media_movel'].to_numpy()[0]
+        media_visitante = df[df['clube'] == visitante]['media_movel'].to_numpy()[0]
+        df_partidas.at[i,'delta_media_clube'] = abs(media_mandante - media_visitante)
+    return df_partidas
+#endFunction
