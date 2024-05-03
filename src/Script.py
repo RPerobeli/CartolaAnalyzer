@@ -14,7 +14,7 @@ PontuacaoOverValorizacao = True
 isTecnicaGoleiroReserva = True
 esquema = [2,2,3,3] #num zagueiros / laterais /meias / atacantes
 cartoletas = 120
-rodadaAtual = 4
+rodadaAtual = 5
 
 
 #Recuperar Clubes
@@ -46,7 +46,7 @@ df_partidas = LimpaDados.RecuperaMediasTimes(df_jogadores,df_partidas)
 df_partidasExposicao = RetrieveDataFromApi.FiltraColunasDesejadas(
         df_partidas, ['rodada', 'clube_casa', 'clube_visitante','delta_media_clube'])
 print("PARTIDAS DA RODADA:")
-print(df_partidasExposicao.sort_values('delta_media_clube', ascending=False))
+print(df_partidasExposicao.sort_values('delta_media_clube', ascending=True))
 
 #Separar jogadores com status provavel e não provavel
 df_jogadores_nulos = df_jogadores[df_jogadores['status_id'] != 7]
@@ -55,7 +55,11 @@ df_jogadores = df_jogadores[df_jogadores['status_id'] == 7]
 
 
 #separar jogadores jogando em casa e jogadores fora de casa
-df_jogadores_casa, df_jogadores_fora = LimpaDados.SeparaDataframeHomeAway(df_jogadores, df_partidas) 
+df_jogadores_casa, df_jogadores_fora = LimpaDados.SeparaDataframeHomeAway(df_jogadores, df_partidas)
+
+#corta jogadores com custo_beneficio ruim e com consistencia duvidosa: 
+df_jogadores_casa = df_jogadores_casa[df_jogadores_casa['custo_beneficio'] < 2.0]
+df_jogadores_casa = df_jogadores_casa[df_jogadores_casa['constancia'] > 1.0]
 
 colunasDesejadasExposicao = [
         'atleta_id',
@@ -77,9 +81,7 @@ colunasDesejadasExposicao = [
 atacantes = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 5]
 
 if(PontuacaoOverValorizacao):
-    mediaUltimaRodadaAta = atacantes['media_movel'].mean()
-    atacantes = atacantes[atacantes['media_num']>= mediaUltimaRodadaAta]
-    atacantes = atacantes.sort_values('constancia', ascending=False)
+    atacantes = atacantes.sort_values('media_movel', ascending=False)
 else:
     atacantes = atacantes.sort_values('probabilidade_valorizar', ascending=False)
 
@@ -91,9 +93,7 @@ print(atacantes)
 meias = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 4]
 
 if(PontuacaoOverValorizacao):
-    mediaUltimaRodadaMei = meias['media_movel'].mean()
-    meias = meias[meias['media_num']>= mediaUltimaRodadaMei]
-    meias = meias.sort_values('constancia', ascending=False)
+    meias = meias.sort_values('media_movel', ascending=False)
 else:
     meias = meias.sort_values('probabilidade_valorizar', ascending=True)
 
@@ -103,9 +103,7 @@ print(meias)
 #Zagueiros
 zagueiros = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 3]
 if(PontuacaoOverValorizacao):
-    mediaUltimaRodadaZag = zagueiros['media_movel'].mean()
-    zagueiros = zagueiros[zagueiros['media_num']>= mediaUltimaRodadaZag]
-    zagueiros = zagueiros.sort_values('constancia', ascending=False)
+    zagueiros = zagueiros.sort_values('media_movel', ascending=False)
 else:
     zagueiros = zagueiros.sort_values('probabilidade_valorizar', ascending=True)
 
@@ -115,9 +113,7 @@ print(zagueiros)
 #Laterais
 laterais = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 2]
 if(PontuacaoOverValorizacao):
-    mediaUltimaRodadaLat = laterais['media_movel'].mean()
-    laterais = laterais[laterais['media_num']>= mediaUltimaRodadaLat]
-    laterais = laterais.sort_values('constancia', ascending=False)
+    laterais = laterais.sort_values('media_movel', ascending=False)
 else:
     laterais = laterais.sort_values('probabilidade_valorizar', ascending=True)
 
@@ -127,9 +123,7 @@ print(laterais)
 #Goleiros
 goleiros = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 1]
 if(PontuacaoOverValorizacao):
-    mediaUltimaRodadaGol = goleiros['media_movel'].mean()
-    goleiros = goleiros[goleiros['media_num']>= mediaUltimaRodadaGol]
-    goleiros = goleiros.sort_values('constancia', ascending=False)
+    goleiros = goleiros.sort_values('media_movel', ascending=False)
 else:
     goleiros = goleiros.sort_values('probabilidade_valorizar', ascending=True)
 
@@ -139,7 +133,7 @@ print(goleiros)
 #Tecnicos
 tecnicos = df_jogadores_casa[df_jogadores_casa['posicao_id'] == 6]
 if(PontuacaoOverValorizacao):
-    tecnicos = tecnicos.sort_values('constancia', ascending=False)
+    tecnicos = tecnicos.sort_values('media_movel', ascending=False)
 else:
     tecnicos = tecnicos.sort_values('probabilidade_valorizar', ascending=True)
 

@@ -3,17 +3,16 @@ import numpy as np
 
 
 def SeparaDataframeHomeAway(dfJogadores, dfPartidas):
-    clubesCasaNaRodada = dfPartidas['clube_casa_id']
+    clubesCasaNaRodada = dfPartidas['clube_casa_id'].to_list()
     clubesForaNaRodada = dfPartidas['clube_visitante_id']
+ 
+    clubesFortesForaDeCasa = dfPartidas[dfPartidas['delta_media_clube'] < -0.5]['clube_visitante_id'].to_list()
+    clubesCasaNaRodada = clubesCasaNaRodada + clubesFortesForaDeCasa
+    clubesCasaNaRodada = pd.Series(clubesCasaNaRodada) 
 
     dfJogadoresCasa = dfJogadores.loc[dfJogadores['clube_id'].isin(clubesCasaNaRodada)]
     dfJogadoresFora = dfJogadores.loc[dfJogadores['clube_id'].isin(clubesForaNaRodada)]
 
-    '''dfJogadoresCasaRodada = dfJogadores.query(
-        f"'clube_id' in @clubesCasaNaRodada")
-    dfJogadoresForaRodada = dfJogadores.query(
-        f"'clube_id' in @clubesForaNaRodada")
-    '''
     return dfJogadoresCasa, dfJogadoresFora
 # endFunction
 
@@ -157,6 +156,6 @@ def RecuperaMediasTimes(df_jogadores,df_partidas):
         visitante = df_partidas.loc[i,'clube_visitante']
         media_mandante = df[df['clube'] == mandante]['media_movel'].to_numpy()[0]
         media_visitante = df[df['clube'] == visitante]['media_movel'].to_numpy()[0]
-        df_partidas.at[i,'delta_media_clube'] = abs(media_mandante - media_visitante)
+        df_partidas.at[i,'delta_media_clube'] = (media_mandante - media_visitante)
     return df_partidas
 #endFunction
