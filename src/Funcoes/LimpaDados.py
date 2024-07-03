@@ -147,10 +147,41 @@ def CompletaInformacoesEstatisticas(rodadaAtual, df_jogadores_rodadas_anteriores
     return df_jogadores
 #endFunction
 
+def RecuperaMediasDosClubesPorPosicao(df_jogadores):
+    #Atacantes
+    df_atacantes = df_jogadores[df_jogadores['posicao_id'] == 5]
+    df_atacantes = df_atacantes.groupby('clube', as_index=False)['media_movel'].mean().sort_values('media_movel', ascending=False)
+    print('MEDIA ATAQUE TIMES')
+    print(df_atacantes)
+    #Meio-Campistas
+    df_meias = df_jogadores[df_jogadores['posicao_id'] == 4]
+    df_meias = df_meias.groupby('clube', as_index=False)['media_movel'].mean().sort_values('media_movel', ascending=False)
+    print('MEDIA MEIAS TIMES')
+    print(df_meias)
+    #Laterais
+    df_laterais = df_jogadores[df_jogadores['posicao_id'] == 3]
+    df_laterais = df_laterais.groupby('clube', as_index=False)['media_movel'].mean().sort_values('media_movel', ascending=False)
+    print('MEDIA LATERAIS TIMES')
+    print(df_laterais)
+    #Zagueiros
+    df_zagueiros = df_jogadores[df_jogadores['posicao_id'] == 2]
+    df_zagueiros = df_zagueiros.groupby('clube', as_index=False)['media_movel'].mean().sort_values('media_movel', ascending=False)
+    print('MEDIA ZAGUEIROS TIMES')
+    print(df_zagueiros)
+    #Goleiros
+    df_goleiros = df_jogadores[df_jogadores['posicao_id'] == 1]
+    df_goleiros = df_goleiros.groupby('clube', as_index=False)['media_movel'].mean().sort_values('media_movel', ascending=False)
+    print('MEDIA GOLEIROS TIMES')
+    print(df_goleiros)
+
+#endFunction
+
+
+
 def RecuperaMediasTimes(df_jogadores,df_partidas):
     df_partidas['delta_media_clube'] = 0.0
     df = df_jogadores.groupby('clube', as_index=False)['media_movel'].mean().sort_values('media_movel', ascending=False)
-    print(df)
+    #print(df)
     for i in range(0,df_partidas.shape[0]):
         mandante = df_partidas.loc[i,'clube_casa']
         visitante = df_partidas.loc[i,'clube_visitante']

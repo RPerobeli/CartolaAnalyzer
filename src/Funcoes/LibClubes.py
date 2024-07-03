@@ -10,4 +10,7 @@ def GetClubes():
     return clubes
 # endFunction
 
-
+#usa sofascore como fonte de dados
+def GetClubesBySofascore():
+    id_brasileirao = 325
+    URL = f""

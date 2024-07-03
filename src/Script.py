@@ -14,7 +14,7 @@ PontuacaoOverValorizacao = True
 isTecnicaGoleiroReserva = True
 esquema = [2,2,3,3] #num zagueiros / laterais /meias / atacantes
 cartoletas = 120
-rodadaAtual = 5
+rodadaAtual = 8
 
 
 #Recuperar Clubes
@@ -42,6 +42,9 @@ df_jogadores = LimpaDados.CompletaInformacoesEstatisticas(rodadaAtual, df_jogado
 
 #separar jogadores por time
 df_partidas = LimpaDados.RecuperaMediasTimes(df_jogadores,df_partidas)
+df_partidas = LimpaDados.RecuperaMediasTimes(df_jogadores,df_partidas)
+
+LimpaDados.RecuperaMediasDosClubesPorPosicao(df_jogadores)
 
 df_partidasExposicao = RetrieveDataFromApi.FiltraColunasDesejadas(
         df_partidas, ['rodada', 'clube_casa', 'clube_visitante','delta_media_clube'])
@@ -58,8 +61,9 @@ df_jogadores = df_jogadores[df_jogadores['status_id'] == 7]
 df_jogadores_casa, df_jogadores_fora = LimpaDados.SeparaDataframeHomeAway(df_jogadores, df_partidas)
 
 #corta jogadores com custo_beneficio ruim e com consistencia duvidosa: 
-df_jogadores_casa = df_jogadores_casa[df_jogadores_casa['custo_beneficio'] < 2.0]
-df_jogadores_casa = df_jogadores_casa[df_jogadores_casa['constancia'] > 1.0]
+#df_jogadores_casa = df_jogadores_casa[df_jogadores_casa['custo_beneficio'] < 2.0]
+#df_jogadores_casa = df_jogadores_casa[df_jogadores_casa['constancia'] > 1.0]
+#df_jogadores_casa = df_jogadores_casa[df_jogadores_casa['variacao_num'] < 1.0]
 
 colunasDesejadasExposicao = [
         'atleta_id',
